@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const bnvEnvSchema = z.object({
     OUTFIT_CREATION_FREQUENCY: z.number().int().positive().default(8),
-    BNV_URL: z.string().url().default("https://bnv.el"),
+    BNV_URL: z.string().url().default("https://bnv-me-id-api.bnv.me"),
 });
 
 export type SuiConfig = z.infer<typeof bnvEnvSchema>;
