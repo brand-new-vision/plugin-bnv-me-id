@@ -7,15 +7,15 @@ A plugin empowering ElizaOS AI Agents to generate and manages 3D avatars with cu
 ## Overview
 
 1. On agent startup, the plugin:
-   - Automatically creates a new ME:ID account
-   - Loads available wearable items from the BNV API
-   - URL (https://id.bnv.me/[agent's assigned user number]) to the 3D space hosting your agent will show up in your terminal.
+   - Automatically create a new ME:ID account
+   - Loads available wearable item data from the BNV API
+   - URL (https://id.bnv.me/[agent's assigned user number]) to the 3D space hosting your agent will show up in your terminal once an outfit is created.
 
 2. The plugin periodically:
    - Creates outfit based on a mixture of character attributes and relevant memories from all channels
    - There is a default frequency and the value set in your character file overrides the default value
 
-3. Avatar generation uses:
+3. Outfit generation uses:
    - Character name, bio and lore
    - Recent chat history related to fashion, style, and outfits
    - Embedding-based similarity matching to available wearables
