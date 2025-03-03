@@ -14,8 +14,7 @@
             },
             "OUTFIT_CREATION_FREQUENCY": {
                 "type": "number",
-                "description": "How often to refresh outfits (in milliseconds)",
-                "default": 1440 * 60 * 1000
+                "description": "How often to refresh outfits (in milliseconds)"
             }
         }
     },
