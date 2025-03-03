@@ -1,56 +1,46 @@
-# BNV ME:ID Plugin
+# BNV ME:ID ElizaOS Plugin
 
-A plugin for ElizaOS that generates and manages 3D avatars with customizable outfits for agent characters.
+![BNV ME:ID Plugin Banner](images/Eliza-plugin-banner.jpg)
+
+A plugin empowering ElizaOS AI Agents to generate and manages 3D avatars with customizable outfits. More features to come until AI Agents have full autonomy to express themselves in the digital world.
 
 ## Overview
 
-This plugin automatically creates and updates 3D avatars for your ElizaOS agents by:
-- Generating detailed visual appearance descriptions based on character profiles
-- Converting these descriptions into wearable items 
-- Creating outfits by matching descriptions to available wearables
-- Periodically refreshing outfits based on recent style-related conversations
+1. On agent startup, the plugin:
+   - Automatically creates a new ME:ID account
+   - Loads available wearable items from the BNV API
+   - URL (https://id.bnv.me/[agent's assigned user number]) to the 3D space hosting your agent will show up in your terminal.
 
-## Setup
+2. The plugin periodically:
+   - Creates outfit based on a mixture of character attributes and relevant memories from all channels
+   - There is a default frequency and the value set in your character file overrides the default value
 
-1. Add the plugin to your agent's configuration:
+3. Avatar generation uses:
+   - Character name, bio and lore
+   - Recent chat history related to fashion, style, and outfits
+   - Embedding-based similarity matching to available wearables
+
+## Key Settings
+
+1. Required, add BNV_URL to your .env file.
+
+```json
+BNV_URL=https://bnv-me-id-api.bnv.me
+```
+
+2. Required, add BNV ME:ID to your agent's character file
 
 ```json
 "plugins": ["@elizaos/plugin-bnv-me-id"]
 ```
 
-2. Ensure your agent's character file includes necessary configuration:
+3. Optional, but you can decide how often you want the agent to create an outfit.
 
 ```json
 "settings": {
-  "OUTFIT_CREATION_FREQUENCY": "43200000",  // 12 hours in milliseconds
-  "secrets": {},
-  "voice": {
-    "model": "eleven_multilingual_v2"
+  "OUTFIT_CREATION_FREQUENCY": "43200000",  // an outfit will be created every 12 hours
   }
-}
 ```
 
-## Key Settings
+That's it, you won't need an API key.
 
-| Setting | Description | Default |
-|---------|-------------|---------|
-| `BNV_URL` | BNV API endpoint URL for avatar creation | Required |
-| `OUTFIT_CREATION_FREQUENCY` | How often to refresh outfits (in milliseconds) | 1440 * 60 * 1000 (1 day) |
-
-## How It Works
-
-1. On agent startup, the plugin:
-   - Creates a new ME:ID account 
-   - Loads available wearable items from the BNV API
-   - Generates initial avatar attributes based on the character profile
-   - Creates an initial outfit
-
-2. The plugin periodically:
-   - Analyzes recent conversations for style-related content
-   - Generates new visual appearance descriptions
-   - Creates updated outfits that reflect the character's evolving style
-
-3. Avatar generation uses:
-   - Character bio and lore
-   - Recent chat history related to fashion, style, and outfits
-   - Embedding-based similarity matching to available wearables
