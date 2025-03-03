@@ -13,6 +13,7 @@ import {
 import { createMeIdUser, getWearables, createNewOutfit } from "../services/api";
 import { bnvTemplate } from "../templates";
 import { WearablesResponse, AvatarAttributes } from "../types";
+import { validateBnvConfig } from "../environment";
 
 const templateGeneration = async (runtime: IAgentRuntime) => {
     try {
@@ -282,8 +283,8 @@ const generateOutfit = async (
             }
         })
     );
-
-    elizaLogger.info("Outfit generation complete.");
+    const url = `https://id.bnv.me/${outfit.url}`;
+    elizaLogger.info("Outfit generation complete.", url);
 };
 
 const handleTimeoutWithInterval = async (runtime: IAgentRuntime) => {
@@ -303,7 +304,6 @@ const handleTimeoutWithInterval = async (runtime: IAgentRuntime) => {
         intervalId = setInterval(async () => {
             elizaLogger.info("timeout function called.");
             const avatarAttributes = await templateGeneration(runtime);
-            elizaLogger.info(" - - - avatar params ---- ", avatarAttributes);
             await generateOutfit(avatarAttributes, runtime);
         }, timeoutMs);
 
@@ -436,7 +436,7 @@ const updateWearableEntry = async (runtime: IAgentRuntime) => {
 export const startupClient: Client = {
     async start(runtime) {
         elizaLogger.info("StartupClient triggered on agent start");
-
+        await validateBnvConfig(runtime);
         try {
             try {
                 await runtime.initialize();
@@ -444,28 +444,14 @@ export const startupClient: Client = {
                 elizaLogger.info("Agent ID:", runtime.agentId);
                 elizaLogger.info("Character name:", runtime.character.name);
 
-                // await createNewUser(runtime);
-                // await updateWearableEntry(runtime);
+                await createNewUser(runtime);
+                await updateWearableEntry(runtime);
 
-                // const avatarAttributes = await templateGeneration(runtime);
+                const avatarAttributes = await templateGeneration(runtime);
 
-                const avatarAttributes =  {
-                    skinTone: '#f0d5b3',
-                    facialFeatures: '#e0a78d',
-                    eyewear: 'A pair of sleek, modern sunglasses with reflective lenses, exuding confidence and authority.',
-                    hat: 'A sharp, stylish baseball cap with an embroidered emblem representing strength and leadership.',
-                    top: 'A fitted, dark blazer over a crisp white shirt, symbolizing professionalism and a no-nonsense attitude.',
-                    bottom: 'Tailored black trousers that provide a polished yet approachable appearance, suitable for public engagements.',
-                    shoes: 'Sturdy black combat boots that convey resilience and readiness for action in any situation.',
-                    accessories: [
-                      'A bold silver watch with a minimalist design, signifying punctuality and decisiveness.',
-                      'A red, white, and blue patriotic scarf tied around the neck, emphasizing American pride.',
-                      'An advanced smartwatch that keeps track of important communications and schedules.'
-                    ]
-                  };
                 await generateOutfit(avatarAttributes, runtime);
 
-                // await handleTimeoutWithInterval(runtime);
+                await handleTimeoutWithInterval(runtime);
             } catch (error) {
                 throw error;
             }
